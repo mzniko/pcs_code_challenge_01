@@ -1,3 +1,3 @@
 pcs_code_challenge_01
 =====================
-Prompts user for a noun and inserts input into a string.
+Prompts user for various parts of speech and inserts the input into a set of different templates.
