@@ -1,38 +1,42 @@
-require 'pry'
+class UI
 
-def parts
-  puts 'Please enter a noun or noun phrase:'
-  noun_input = gets.chomp
-  puts 'Please enter an adjective or adjectival phrase:'
-  adj_input = gets.chomp
-  puts 'Please enter a verb or verb phrase:'
-  verb_input = gets.chomp
-  puts 'Please enter an adverb or adverbial phrase:'
-  adv_input = gets.chomp
-  puts 'Please enter an object:'
-  obj_input = gets.chomp
+  def prompt
+    puts 'Please enter a noun or noun phrase:'
+    noun_input = gets.chomp
+    puts 'Please enter an adjective or adjectival phrase:'
+    adj_input = gets.chomp
+    puts 'Please enter a verb or verb phrase:'
+    verb_input = gets.chomp
+    puts 'Please enter an adverb or adverbial phrase:'
+    adv_input = gets.chomp
+    puts 'Please enter an object:'
+    obj_input = gets.chomp
 
-  gathered_parts = { noun: noun_input, adj: adj_input, verb: verb_input,
-                     adv: adv_input, obj: obj_input }
-  binding.pry
-  gathered_parts
+    gathered_parts = { noun: noun_input, adj: adj_input, verb: verb_input,
+                       adv: adv_input, obj: obj_input }
+    gathered_parts
+  end
+
 end
 
-def template(gathered_parts)
-  template_a = "The #{gathered_parts[:adj]} #{gathered_parts[:noun]} suddenly \
-and #{gathered_parts[:adv]} had to #{gathered_parts[:verb]} the \
-#{gathered_parts[:obj]}."
-  template_b = "A #{gathered_parts[:adj]} #{gathered_parts[:noun]} likes \
-#{gathered_parts[:obj]}."
-  template_c = "We #{gathered_parts[:verb]}ed #{gathered_parts[:adv]} to get \
-the #{gathered_parts[:noun]}."
+class SentenceTemplate
+  def initialize 
+    @templates = ["The (adj) (noun) suddenly and (adv) had to (verb) the (obj).", "A (adj) (noun) likes (obj).", "We (verb)ed (adv) to get the (noun)."]
+  end
 
-  templates = [template_a, template_b, template_c]
-
-  templates.each do |template|
-    puts template
-    binding.pry
+  def insert(gathered_parts)
+    @templates.each do |sentence|
+      gathered_parts.each do |part, phrase|
+        regex = "\(#{part.to_s}\)"
+        sentence.sub!(regex, phrase)
+      end
+      puts sentence
+    end
   end
 end
 
-template parts
+ui = UI.new
+gathered_parts = ui.prompt
+
+templates = SentenceTemplate.new
+templates.insert gathered_parts
